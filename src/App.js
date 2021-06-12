@@ -3,11 +3,13 @@ import './App.css';
 import Tmdb from './Tmdb'; 
 import MovieRow from './MovieRow';
 import FeaturedMovie from './FeaturedMovie';
+import Header from './Header';
 
 export default () => {
   
   const [movieList, setMovieList] = useState([]);
-  const [featuredData, setFeaturedData] = useState(null);
+  const [featuredData, setFeaturedData]= useState(null);
+  const [blackHeader, setblackHeader]= useState(false)
 
   useEffect(()=>{
     const loadAll = async () => {
@@ -24,8 +26,25 @@ export default () => {
     loadAll();
   }, []);
 
+  useEffect(()=>{
+    const scrollListener = () =>{
+        if(window.scrollY > 320){
+          setblackHeader(true);
+        }else{
+          setblackHeader(false);
+        }
+    }
+
+    window.addEventListener('scroll', scrollListener);
+
+    return () =>{
+      window.removeEventListener('scroll', scrollListener);
+    }
+  }, []);
+
 return (
     <div className="page">
+      <Header black={blackHeader}/>
     {featuredData && 
         <FeaturedMovie item ={featuredData}/>
       }
@@ -38,10 +57,10 @@ return (
         }
       </section>
       <footer>
-        Feito em Live (https://www.youtube.com/watch?v=tBweoUiMsDg) para estudo de react, todos os direitos das imagens são da Netflix.
-        Dados Extraidos de https://www.themoviedb.org/
+        Feito com <span role="img" aria-label="coração">۞</span> pela B7WEB<br/>
+        direitos de imagem para Netflix<br/>
+        dados pegos do site themoviedb.org
       </footer>
-
 
     {movieList.length <= 0 &&
       <div className="loading">
